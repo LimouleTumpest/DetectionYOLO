@@ -10,8 +10,8 @@ def Detection(model, image):
 
     for box in result.boxes:
         x1, y1, x2, y2 = box.xyxy[0].tolist()
-        conf = float(box.conf[0]) #conf = confidence, entre 0 (pas fiable) et 1 (certain)
-        cls  = int(box.cls[0]) #cls = class, identifiant correspondant à quelque chose dans un modèle. Ici il faudra définir l'identifiant pour les étiquettes plus tard
+        conf = float(box.conf[0]) # conf = confidence, entre 0 (pas fiable) et 1 (certain)
+        cls  = int(box.cls[0]) # cls = class, 0 = face, 1 = dos
         if conf >= 0.40:
             detections.append((int(x1), int(y1), int(x2), int(y2), conf, cls))
 
@@ -21,7 +21,7 @@ def Detection(model, image):
         cy = int((y1 + y2) / 2)
 
         # Dessiner le rectangle et les coordonnées
-        if cls == 0 :
+        if cls == 0 : # Si l'identifiant correspond à une étiquette de face
             cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
             cv2.putText(
@@ -34,7 +34,7 @@ def Detection(model, image):
                 1
             )
 
-        else :
+        else : # Si l'identifiant correspond à une étiquette de dos
             cv2.rectangle(image, (x1, y1), (x2, y2), (255, 0, 0), 2)
 
             cv2.putText(
